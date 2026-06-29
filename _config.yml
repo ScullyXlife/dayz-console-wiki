@@ -1,0 +1,26 @@
+title: DayZ Console Server Wiki
+description: Complete field-level reference for every DayZ console server configuration file — Xbox & PlayStation.
+remote_theme: just-the-docs/just-the-docs
+
+color_scheme: dark
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+
+search_enabled: true
+search:
+  heading_level: 3
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+
+nav_sort: order
+
+footer_content: "DayZ Console Server Configuration Reference &mdash; Xbox &amp; PlayStation"
+
+aux_links:
+  "View on GitHub":
+    - "//github.com/Iron-Chronicle/dayz-console-wiki"
+
+aux_links_new_tab: true
