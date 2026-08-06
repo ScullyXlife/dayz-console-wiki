@@ -197,15 +197,15 @@ Once added here, you can reference `<usage name="CustomMilitary"/>` in types.xml
 
 ---
 
-## How This File Breaks Things (Silently)
+## How This File Breaks Things
 
-The most dangerous aspect of these files is that mismatches fail silently:
+Mismatches between a reference elsewhere and the names defined here do not fail as loudly as a full parse error, but they are not silent in the RPT logs either — the engine's loader can emit an explicit diagnostic (a `'<name>' not present?` style message) when a referenced name doesn't resolve. **The gameplay effect can still look "silent"** — no in-game error reaches the player, and the item simply doesn't appear where expected — but an admin checking the RPT log after a change has a real diagnostic to look for, not nothing.
 
-- An item in types.xml with `<usage name="Millitary"/>` (typo) — the usage name doesn't exist in this file, so the item has no valid usage routing and will not spawn naturally.
+- An item in types.xml with `<usage name="Millitary"/>` (typo) — the usage name doesn't exist in this file, so the item has no valid usage routing and will not spawn naturally. Check the RPT log for a missing-name warning tied to this reference.
 - An item with `<value name="Tier5"/>` — Tier5 doesn't exist in valueflags, so the tier reference is invalid and the item's tier routing is broken.
 - A loot point in mapgroupproto.xml with `<category name="gear"/>` — if `gear` isn't in categories, that filter is ignored or broken.
 
-There is no in-game error. No warning. The item simply doesn't appear where expected.
+No in-game error reaches the player. Always check the RPT log after adding a new category/usage/tag/value reference — do not assume the absence of an in-game message means the absence of any diagnostic at all.
 
 ---
 
@@ -213,7 +213,7 @@ There is no in-game error. No warning. The item simply doesn't appear where expe
 
 | Mistake | Result |
 |---|---|
-| Typo in a usage/category name elsewhere that doesn't match this file | Item silently doesn't spawn in expected locations |
-| Removing an entry from cfglimitsdefinition.xml that types.xml still references | Broken reference, item loses that routing |
+| Typo in a usage/category name elsewhere that doesn't match this file | Item doesn't spawn in expected locations; no in-game error, but check RPT for a missing-name diagnostic |
+| Removing an entry from cfglimitsdefinition.xml that types.xml still references | Broken reference, item loses that routing, RPT log records the missing name |
 | Adding new entries to base file instead of user file | Works but makes future updates harder to track |
 | Case mismatch (`military` vs `Military`) | Reference fails — these are case-sensitive |

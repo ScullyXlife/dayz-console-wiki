@@ -122,10 +122,28 @@ For items that should spawn in variable quantities (ammo piles, gear scattered a
 
 #### `deloot`
 
+**This is a three-state value, not a plain boolean.** The native loader (`0x1407fe370`) preserves and accepts `-1` in addition to `0` and `1`:
+
 - `0` — object is treated as a persistent world object, not subject to CE loot cycling
 - `1` — object is treated as dynamic loot, CE may cycle it through cleanup/respawn
+- `-1` — accepted by the loader as a distinct state from `0`/`1`; treat as "unset/inherit" rather than assuming it behaves identically to `0`
 
-For structural objects (wrecks, buildings) use `0`. For loose loot items, use `1`.
+For structural objects (wrecks, buildings) use `0`. For loose loot items, use `1`. Don't assume `-1` and `0` are interchangeable without testing — the loader keeps them as separate values.
+
+---
+
+#### `spawnsecondary` and `trace`
+
+Two additional per-child fields the native loader reads, in addition to the attributes above:
+
+| Attribute | Type | What it controls |
+|---|---|---|
+| `spawnsecondary` | Integer (0 or 1) | Whether this child can trigger a secondary spawner (used for NPC/AI-linked children within an event group, paired with the `sec_spawner` flag in events.xml) |
+| `trace` | Integer (0 or 1) | Whether this child's placement is terrain-traced (adjusted to sit correctly on uneven ground) rather than placed at a flat offset |
+
+```xml
+<child type="Wolf_Grey" lootmax="0" lootmin="0" x="1.0" y="0" z="0.5" a="0" deloot="0" spawnsecondary="1" trace="1"/>
+```
 
 ---
 

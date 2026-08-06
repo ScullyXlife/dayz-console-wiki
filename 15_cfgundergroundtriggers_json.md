@@ -8,9 +8,9 @@ parent: "Mission Root Config"
 
 ## Purpose
 
-`cfgundergroundtriggers.json` defines the underground zones and their entry/exit trigger areas. When a player crosses into a trigger volume, the engine switches them to the underground rendering and simulation context. This file defines where those transitions happen and what underground areas they connect to.
+`cfgundergroundtriggers.json` defines the trigger volumes that switch a player into the underground rendering and simulation context (bunkers) and back out again. This file defines where those transitions happen.
 
-On most console servers this file is left at defaults. It becomes relevant if your server has a custom underground area or if you are adjusting the trigger geometry for existing underground zones.
+On most console servers this file is left at defaults. It becomes relevant if your server has a custom underground area or if you are adjusting trigger geometry for an existing one.
 
 ## Console Path
 
@@ -23,40 +23,32 @@ dayzps_missions/dayzOffline.<mapname>/cfgundergroundtriggers.json    (PlayStatio
 
 ## Full Block Structure
 
-**Vanilla default — empty trigger list:**
-
-```json
-{
-  "Triggers": []
-}
-```
-
-The vanilla file ships with no triggers defined. Triggers are added when underground areas with entry/exit points exist on the map.
-
-**Populated example:**
+The installed schema does not match the field names used in older guides (`name`, `pos`, `size`, `dir`, `innerDist`, `USAreaName`). The confirmed structure is:
 
 ```json
 {
   "Triggers": [
     {
-      "name": "Bunker_Main_Entrance",
-      "pos": [4521.0, 15.0, 7832.0],
-      "size": [3.0, 4.0, 3.0],
-      "dir": [0.0, 0.0, 1.0],
-      "innerDist": 1.5,
-      "USAreaName": "Bunker_01"
-    },
-    {
-      "name": "Bunker_Secondary_Entrance",
-      "pos": [4535.0, 14.5, 7845.0],
-      "size": [2.5, 3.5, 2.5],
-      "dir": [1.0, 0.0, 0.0],
-      "innerDist": 1.0,
-      "USAreaName": "Bunker_01"
+      "Position": [4521.0, 15.0, 7832.0],
+      "Orientation": [0.0, 0.0, 0.0],
+      "Size": [3.0, 4.0, 3.0],
+      "EyeAccommodation": 1.5,
+      "InterpolationSpeed": 1.0,
+      "AmbientSoundSet": "bunker_ambient",
+      "Breadcrumbs": [
+        {
+          "Position": [4521.0, 14.0, 7830.0],
+          "EyeAccommodation": 1.0,
+          "Radius": 2.0,
+          "UseRaycast": true
+        }
+      ]
     }
   ]
 }
 ```
+
+An installed 8-trigger mission carries 21 `Breadcrumbs` records total across its triggers.
 
 ---
 
@@ -64,45 +56,32 @@ The vanilla file ships with no triggers defined. Triggers are added when undergr
 
 ### `Triggers` (array)
 
-Array of trigger volume definitions. Each entry is one entrance/exit point to an underground area.
+Array of trigger volume definitions. Each entry is one underground transition point.
 
 ---
 
 ### Per-Trigger Fields
 
-#### `name`
-**Type:** String  
-Identifier for this trigger. Used in logs. Should be unique.
+#### `Position`
+Array of 3 floats `[X, Y, Z]`. World position of the trigger volume.
 
----
+#### `Orientation`
+Array of 3 floats. Rotation of the trigger volume.
 
-#### `pos`
-**Type:** Array of 3 floats `[X, Y, Z]`  
-World position of the trigger volume center. Y is height above terrain.
+#### `Size`
+Array of 3 floats `[width, height, depth]` in meters. Dimensions of the trigger box.
 
----
+#### `EyeAccommodation`
+Float. Governs how the camera/eye adjusts when crossing the trigger (transition easing). Exact formula not confirmed.
 
-#### `size`
-**Type:** Array of 3 floats `[width, height, depth]`  
-Dimensions of the trigger box in meters. Players entering this volume trigger the underground transition.
+#### `InterpolationSpeed`
+Float. Speed of the visual transition between above-ground and underground rendering contexts.
 
----
+#### `AmbientSoundSet`
+String. Name of the ambient sound set played inside the connected underground area.
 
-#### `dir`
-**Type:** Array of 3 floats `[X, Y, Z]`  
-Direction vector indicating which way the trigger is oriented (facing direction).
-
----
-
-#### `innerDist`
-**Type:** Float (meters)  
-Inner distance threshold within the trigger volume at which the transition actually fires.
-
----
-
-#### `USAreaName`
-**Type:** String  
-The underground area this trigger connects to. Multiple triggers can reference the same area name — they are all entry/exit points for the same underground space.
+#### `Breadcrumbs`
+Array of waypoint-style records used inside the underground area itself, each with `Position`, `EyeAccommodation`, `Radius`, and `UseRaycast`. Their exact routing purpose (guiding the transition camera, or pathing) is not fully confirmed — treat as an observed field list, not a fully proven behavior.
 
 ---
 
@@ -110,8 +89,8 @@ The underground area this trigger connects to. Multiple triggers can reference t
 
 Rarely edited in normal console operations. Relevant when:
 - Adding a custom bunker or underground area
-- Adjusting trigger size if players are having trouble with underground transitions
-- Adding new entry points to an existing underground area
+- Adjusting `Size` if players are having trouble triggering the transition
+- Adding new `Breadcrumbs` entries to an existing underground area
 
 ---
 
@@ -119,7 +98,12 @@ Rarely edited in normal console operations. Relevant when:
 
 | Mistake | Result |
 |---|---|
-| `pos` coordinates wrong | Trigger is in wrong location or underground — players can't find it |
-| `size` too small | Players walk past the entrance without triggering the transition |
-| `USAreaName` mismatch between entrance triggers | Multiple entrances don't connect to same underground space |
+| `Position` coordinates wrong | Trigger is in the wrong location — players can't find it |
+| `Size` too small | Players walk past the entrance without triggering the transition |
 | JSON syntax error | File rejected entirely, underground transitions may break |
+
+---
+
+## Confidence Note
+
+This page reflects the confirmed installed field shape (`Position`, `Orientation`, `Size`, `EyeAccommodation`, `InterpolationSpeed`, `AmbientSoundSet`, `Breadcrumbs`). The previous `name`/`pos`/`dir`/`innerDist`/`USAreaName` schema did not match any installed mission and has been removed. The exact numeric behavior of `EyeAccommodation` and `InterpolationSpeed` is observed-field-only, not binary-confirmed.

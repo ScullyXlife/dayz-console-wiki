@@ -33,12 +33,12 @@ dayzps_missions/dayzOffline.<mapname>/db/globals.xml    (PlayStation)
 <variables>
   <var name="AnimalMaxCount" type="0" value="200"/>
   <var name="CleanupAvoidance" type="0" value="100"/>
-  <var name="CleanupLifetimeDeadAnimal" type="0" value="1200"/>
-  <var name="CleanupLifetimeDeadInfected" type="0" value="330"/>
+  <var name="CleanupLifetimeDeadAnimal" type="0" value="900"/>
+  <var name="CleanupLifetimeDeadInfected" type="0" value="240"/>
   <var name="CleanupLifetimeDeadPlayer" type="0" value="3600"/>
   <var name="CleanupLifetimeDefault" type="0" value="45"/>
   <var name="CleanupLifetimeLimit" type="0" value="50"/>
-  <var name="CleanupLifetimeRuined" type="0" value="330"/>
+  <var name="CleanupLifetimeRuined" type="0" value="240"/>
   <var name="FlagRefreshFrequency" type="0" value="432000"/>
   <var name="FlagRefreshMaxDuration" type="0" value="3456000"/>
   <var name="FoodDecay" type="0" value="1"/>
@@ -161,8 +161,8 @@ How long a dead player's body remains in the world before cleanup removes it.
 **Type:** Integer (seconds)  
 How long dead infected remain before cleanup.
 
-**Default:** 330  
-**Note:** Lower values keep the world cleaner and reduce visual clutter from kills. High-traffic combat areas accumulate fast.
+**Observed value:** 240 (4 minutes)  
+**Note:** Lower values keep the world cleaner and reduce visual clutter from kills. High-traffic combat areas accumulate fast. This is a snapshot value, not a binary-hardcoded universal default — confirm against your own `globals.xml`.
 
 ---
 
@@ -170,7 +170,7 @@ How long dead infected remain before cleanup.
 **Type:** Integer (seconds)  
 How long dead animals (not killed by players — natural despawn) remain before cleanup.
 
-**Default:** 1200 (20 minutes)
+**Observed value:** 900 (15 minutes) — a snapshot value, confirm against your own `globals.xml` rather than assuming it is engine-hardcoded.
 
 ---
 
@@ -193,7 +193,7 @@ A threshold value used by the cleanup scheduler. Interacts with the general clea
 **Type:** Integer (seconds)  
 How long ruined items (condition = ruined) persist before CE removes them.
 
-**Default:** 330  
+**Observed value:** 240 (4 minutes) — a snapshot value, not a confirmed universal default.  
 **Lowering this:** Ruined gear clears faster — keeps the world cleaner.  
 **Raising this:** Ruined gear sticks around longer.
 
@@ -205,18 +205,13 @@ How long ruined items (condition = ruined) persist before CE removes them.
 
 #### `FlagRefreshFrequency`
 **Type:** Integer (seconds)  
-How often the flag/territory persistence refresh cycle runs. Flags keep player bases protected from decay. This controls how frequently the refresh check happens.
-
-**Default:** 432000 (5 days)
+Observed value: 432000 (5 days). The variable name and value are confirmed present in globals.xml; the exact function that consumes it has not been isolated in the binary, so treat "how often the flag refresh cycle runs" as the intended purpose rather than a proven mechanism.
 
 ---
 
 #### `FlagRefreshMaxDuration`
 **Type:** Integer (seconds)  
-Maximum duration a flag/territory can be refreshed and remain active without player interaction.
-
-**Default:** 3456000 (40 days)  
-**Note:** This is the maximum persistence window for player-placed flags.
+Observed value: 3456000 (40 days). Same caveat as `FlagRefreshFrequency` — name and value are confirmed, the exact consuming function is not independently isolated.
 
 ---
 
@@ -325,7 +320,7 @@ General time penalty value applied in certain anti-exploit situations.
 
 #### `WorldWetTempUpdate`
 **Type:** Integer (0 or 1)  
-Enables/disables wetness and temperature update simulation for world objects. Leave at `1` unless you have a specific reason to disable.
+Name and value are confirmed present in globals.xml; the exact consuming function has not been independently isolated in the binary. Treat "enables/disables wetness and temperature update simulation" as the intended purpose based on the name, not a fully proven mechanism. Leave at `1` unless you have a specific reason to disable.
 
 ---
 
@@ -357,10 +352,10 @@ How long after all players disconnect before the server enters idle mode.
 
 #### `FoodDecay`
 **Type:** Integer (0 or 1)  
-Enables or disables food decay across the entire server.
+Name and value are confirmed present in globals.xml; the exact consuming function has not been independently isolated. Treat "enables or disables food decay" as the intended purpose based on the name, not a fully proven mechanism.
 
-**Default:** 1 (food decays normally in vanilla)  
-**`0`:** Disables food decay — popular on console servers to reduce gear maintenance frustration.  
+**Observed value:** 1  
+**`0`:** Believed to disable food decay — popular on console servers to reduce gear maintenance frustration. Test before relying on this.  
 **`1`:** Food decays normally over time.
 
 ---

@@ -150,9 +150,29 @@ This spawns the item between pristine and lightly worn.
 
 ---
 
+### `<attachments chance="..." preset="...">`
+
+In addition to inline `<item>` entries, an `<attachments>` block can reference a named preset instead:
+
+```xml
+<attachments chance="0.50" preset="MilitaryOptics" />
+```
+
+- `preset` — name of an attachment preset defined in `cfgrandompresets.xml`, used the same way `<cargo preset="...">` references a cargo preset.
+
+If the referenced preset name doesn't exist in `cfgrandompresets.xml`, the attachments block is silently ignored, same as a bad `cargo preset=`.
+
+---
+
 ### `<tag name="...">` and `<hoarder>`
 
 Less commonly edited. `<tag>` assigns context tags that interact with loot point filtering. `<hoarder>` marks the item as a hoarder-class item for CE counting purposes. Leave these at their defaults in normal operations.
+
+---
+
+### Additional native tokens
+
+The native loader also recognizes `unique`, `subcounter`, `batch`, and `equip` tokens in this file's schema. Their exact consumers and gameplay effect have not been independently traced yet — treat them as present-and-recognized, not fully documented. Avoid relying on undocumented behavior for these on a production server without testing first.
 
 ---
 

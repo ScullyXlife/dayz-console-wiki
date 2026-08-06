@@ -30,14 +30,16 @@ dayzps_missions/dayzOffline.<mapname>/mapgrouppos.xml    (PlayStation)
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<structures>
+<map>
 
   <group pos="3421.50 0.00 7832.10" rpy="0.00 0.00 0.00" a="52.3" name="Land_PoliceStation_Small" />
   <group pos="5102.25 0.00 4671.80" rpy="0.00 0.00 0.00" a="127.0" name="Land_House_1W01" />
   <group pos="6234.10 0.00 3901.45" rpy="0.00 0.00 0.00" a="0.0" name="Land_Mil_Barracks_i" />
 
-</structures>
+</map>
 ```
+
+**Root element correction:** the document root is `<map>`, not `<structures>`. The `<group pos rpy a name/>` record shape itself is unchanged and confirmed.
 
 ---
 

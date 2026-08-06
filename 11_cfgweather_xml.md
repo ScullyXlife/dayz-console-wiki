@@ -68,6 +68,7 @@ dayzps_missions/dayzOffline.<mapname>/cfgweather.xml    (PlayStation)
     <limits min="0.0" max="0.5" />
     <timelimits min="1800" max="7200" />
     <changelimits min="0.0" max="0.1" />
+    <thresholds min="0.3" max="0.5" end="0" />
   </snowfall>
 
   <storm density="0.5" threshold="0.7" timeout="1800" />
@@ -207,6 +208,8 @@ Controls snowfall intensity. Primarily relevant for Sakhal (the snow map). On Ch
 
 - `0.0` = no snow
 - `1.0` = heavy snowfall
+
+Like `<rain>`, `<snowfall>` supports a `<thresholds min="..." max="..." end="..." />` sub-element with the same meaning as the rain thresholds: `min`/`max` govern the overcast level needed for snowfall to start/stop, and `end` controls end behavior.
 
 ---
 

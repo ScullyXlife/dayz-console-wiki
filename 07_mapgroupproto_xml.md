@@ -29,10 +29,16 @@ dayzps_missions/dayzOffline.<mapname>/mapgroupproto.xml    (PlayStation)
 
 ## Full Block Structure
 
+The installed root is `<prototype>`, not `<groups>`. Groups also support `<defaults>`, a `<value>` element, and `<dispatch>`/`<proxy>` records for exported proxy objects, none of which are in the older `<groups>` schema:
+
 ```xml
-<groups>
+<prototype>
 
   <group name="Land_PoliceStation_Small" lootmax="8">
+    <defaults>
+      <category name="tools" />
+    </defaults>
+    <value>1</value>
     <usage name="Police" />
     <container name="lootFloor" lootmax="4">
       <category name="clothes" />
@@ -50,6 +56,9 @@ dayzps_missions/dayzOffline.<mapname>/mapgroupproto.xml    (PlayStation)
       <tag name="floor" />
       <point pos="0.0 0.2 0.0" range="0.5" height="0.5" flags="32" />
     </container>
+    <dispatch dechance="0.1">
+      <proxy type="Land_Wreck_Ikarus" pos="0 0 0" rpy="0 0 0" dechance="0.1" />
+    </dispatch>
   </group>
 
   <group name="Land_House_1W01" lootmax="5">
@@ -64,8 +73,10 @@ dayzps_missions/dayzOffline.<mapname>/mapgroupproto.xml    (PlayStation)
     </container>
   </group>
 
-</groups>
+</prototype>
 ```
+
+**Root element correction:** the document root is `<prototype>`. The rest of the group/container/point shape below is unchanged and confirmed.
 
 ---
 
@@ -141,6 +152,33 @@ One physical loot spawn volume inside the building.
 | Value | Behavior |
 |---|---|
 | `32` | Standard loot spawn — items appear on ground/floor surfaces |
+
+---
+
+### `<defaults>` (on group)
+
+Optional block of default category/tag/usage values applied to the group's containers unless a container overrides them. Point flags and full dispatch-behavior semantics beyond this are not fully resolved.
+
+---
+
+### `<value>` (on group)
+
+A tier/value marker on the group itself, separate from any `<value>` entries inside container-level filtering. Exact interaction with per-item `<value>` routing in types.xml is not fully confirmed.
+
+---
+
+### `<dispatch dechance="...">` / `<proxy type="..." pos="..." rpy="..." dechance="...">`
+
+Defines proxy objects the group can export — e.g. a wreck or prop attached to the building's footprint — and the "dechance" (de-spawn/decay chance) associated with them.
+
+| Attribute | What it controls |
+|---|---|
+| `dechance` (on `<dispatch>`) | Overall chance modifier for the dispatch block |
+| `type` (on `<proxy>`) | Classname of the exported proxy object |
+| `pos` / `rpy` (on `<proxy>`) | Local position/rotation of the proxy relative to the group |
+| `dechance` (on `<proxy>`) | Per-proxy chance value |
+
+Point flags beyond `32`, full `dechance` formula, and export-shape meaning remain incompletely resolved — treat this section as an observed field list, not proven behavior.
 
 ---
 

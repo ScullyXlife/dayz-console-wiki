@@ -161,6 +161,7 @@ Spawn placement mode.
 
 - `fixed` — event spawns at specific coordinates from cfgeventspawns.xml
 - `player` — positions relative to player location (less common, some special events)
+- `uniform` — positions are drawn more evenly across the available coordinate pool rather than fully random selection
 
 Most events use `fixed`.
 
@@ -173,6 +174,10 @@ Limiter mode controlling how the nominal cap is interpreted.
 
 - `child` — cap applies to child objects within the event
 - `mixed` — mixed limiter mode, used by animal events
+- `parent` — cap applies at the parent/event level rather than per-child
+- `custom` — custom limiter logic, used by specific event types outside the standard child/parent/mixed patterns
+
+If `<limit>` is set to `child` or `mixed` but a specific child's `max` is left at `0`, the event is defined without a usable child cap — check the RPT log for a related diagnostic if children aren't appearing as expected.
 
 ---
 

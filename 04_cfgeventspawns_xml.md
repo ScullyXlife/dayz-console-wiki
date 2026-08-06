@@ -74,6 +74,39 @@ One spawn location candidate. The event scheduler draws from all `<pos>` entries
 
 ---
 
+### `<pos ... group="..." />` (group-linked positions)
+
+A `<pos>` entry can optionally carry a `group` attribute, linking it to a named group defined in `cfgeventgroups.xml`:
+
+```xml
+<pos x="4523.3" z="9241.7" a="0.0" group="StaticHeliCrashSite" />
+```
+
+If `group` is set, the engine validates that the referenced group exists before using the position. A dangling `group` reference (name not found in cfgeventgroups.xml) is rejected — the position is not used for that event.
+
+---
+
+### Dynamic zones
+
+An event can also carry dynamic zone records inside its `cfgeventspawns.xml` block, controlling a radius-based population zone independent of the fixed `<pos>` list:
+
+```xml
+<event name="AnimalWolf">
+  <zone r="30" smin="0" smax="0" dmin="1" dmax="5" />
+  <pos x="3421.0" z="8901.2" a="0.0" />
+</event>
+```
+
+| Attribute | What it controls |
+|---|---|
+| `r` | Zone radius (meters) |
+| `smin` / `smax` | Static minimum/maximum count for the zone |
+| `dmin` / `dmax` | Dynamic minimum/maximum count for the zone |
+
+An installed mission carries 30 dynamic zone records. Negative radius/minima and inverted maxima (`smax` < `smin`, etc.) are rejected by the loader.
+
+---
+
 ## What Console Admins Typically Adjust
 
 1. **Adding `<pos>` entries** — expand the spawn pool to make events appear in more locations.

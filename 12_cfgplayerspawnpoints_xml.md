@@ -56,6 +56,15 @@ Spawn points organized into named groups. Players are assigned to groups and spa
       <counter>3</counter>
       <groups_as_regular>true</groups_as_regular>
     </group_params>
+    <generator_params>
+      <grid_density>50</grid_density>
+      <grid_width>14000</grid_width>
+      <grid_height>14000</grid_height>
+      <min_dist_static>0</min_dist_static>
+      <max_dist_static>1000</max_dist_static>
+      <min_steepness>0</min_steepness>
+      <max_steepness>30</max_steepness>
+    </generator_params>
     <generator_posbubbles>
       <group name="CoastNorth" lifetime="300" counter="3">
         <pos x="3692.5" z="2376.2" />
@@ -115,6 +124,21 @@ Controls how the engine evaluates spawn points for quality. Points are rated aga
 | `max_dist_static` | Maximum evaluation distance from buildings (meters) |
 
 These don't hard-block spawns at those points — they rate the quality of each candidate point and the engine prefers higher-rated points.
+
+---
+
+### `<generator_params>` (Format 2 only)
+
+Controls the generator used to lay out the grid of candidate spawn points before group/quality scoring is applied.
+
+| Element | What it controls |
+|---|---|
+| `grid_density` | Spacing/density of the generated candidate point grid |
+| `grid_width` / `grid_height` | Dimensions of the area the generator covers (meters) |
+| `min_dist_static` / `max_dist_static` | Minimum/maximum distance from static buildings for a generated point to be considered |
+| `min_steepness` / `max_steepness` | Minimum/maximum terrain steepness a generated point can sit on |
+
+The exact scoring/generator formula that turns these inputs into the final selected spawn points is not fully confirmed — treat this as the field shape, not a proven algorithm.
 
 ---
 

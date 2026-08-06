@@ -8,9 +8,9 @@ parent: "Map Loot System"
 
 ## Purpose
 
-The `mapgroupcluster*.xml` files group building loot positions from `mapgrouppos.xml` into geographic clusters. Clustering allows the CE to manage loot across a geographic area as a coordinated group rather than individual disconnected buildings.
+The `mapgroupcluster*.xml` files are a flat map of group records, plus include links that split the full map's cluster data across multiple files. They are not a nested geographic grouping of `mapgrouppos.xml` buildings — each `<group>` record here is itself a placement entry, in the same shape as `mapgrouppos.xml`, just organized into these split files.
 
-There are multiple cluster files (`mapgroupcluster.xml`, `mapgroupcluster01.xml` through `mapgroupcluster05.xml`) that together cover the full map, organized by geographic area.
+There are multiple cluster files (`mapgroupcluster.xml`, `mapgroupcluster01.xml` through `mapgroupcluster05.xml`) that together cover the full map. An installed mission spans six such files (225,016 split group records total) plus six `<include>` records tying them together.
 
 ## Console Path
 
@@ -23,69 +23,60 @@ dayzxb_missions/dayzOffline.<mapname>/mapgroupcluster05.xml
 
 ## Connects To
 
-- **mapgrouppos.xml** — clusters reference the building position groups defined there
-- **mapclusterproto.xml** — cluster prototypes define the cluster behavior rules
+- **mapgroupproto.xml** — `name` values reference prototype/group names defined there
+- **mapclusterproto.xml** — cluster prototypes define cluster-level behavior rules
 
 ---
 
 ## Full Block Structure
 
+The installed root is `<map>`, with flat `<group>` records carrying `name`, `pos`, and `a` attributes directly — not a nested `<group><map><mapgrouppos>` hierarchy:
+
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mapgroupcluster>
+<map>
 
-  <group name="Chernogorsk_Center">
-    <map>
-      <mapgrouppos name="Land_PoliceStation_Small" pos="3421.50 0.00 7832.10" />
-      <mapgrouppos name="Land_House_1W01" pos="5102.25 0.00 4671.80" />
-      <mapgrouppos name="Land_Store_Grocery" pos="5110.00 0.00 4680.50" />
-    </map>
-  </group>
+  <group name="Land_PoliceStation_Small" pos="3421.50 0.00 7832.10" a="52.3" />
+  <group name="Land_House_1W01" pos="5102.25 0.00 4671.80" a="127.0" />
 
-  <group name="NW_Airfield_Complex">
-    <map>
-      <mapgrouppos name="Land_Mil_Barracks_i" pos="6234.10 0.00 3901.45" />
-      <mapgrouppos name="Land_Mil_Barracks_i" pos="6245.00 0.00 3912.00" />
-    </map>
-  </group>
+  <include file="mapgroupcluster01.xml" />
 
-</mapgroupcluster>
+</map>
 ```
+
+**This is a structural correction, not a cosmetic one.** The previous nested `<mapgroupcluster><group><map><mapgrouppos name pos /></map></group>` shape, and the claim that these files represent geographic groupings of buildings, were not confirmed against the installed file and have been removed.
 
 ---
 
 ## Field-by-Field Reference
 
-### `<group name="...">`
+### `<group name="..." pos="..." a="..." />`
 
-A named cluster of building positions that the CE manages together as a geographic group.
-
-- `name` — identifier for this cluster, used internally by CE
-
----
-
-### `<mapgrouppos name="..." pos="..." />`
-
-References a specific building instance by its proto name and world position. Must match an entry in mapgrouppos.xml.
+One placement record, structurally identical in shape to a `mapgrouppos.xml` entry.
 
 | Attribute | What it controls |
 |---|---|
-| `name` | Proto group name — must match mapgroupproto.xml |
-| `pos` | World position — must match the position in mapgrouppos.xml |
+| `name` | Prototype/group name — must match mapgroupproto.xml |
+| `pos` | World position ("X Y Z") |
+| `a` | Angle (yaw rotation) in degrees |
+
+---
+
+### `<include file="..." />`
+
+Pulls in another cluster file's `<group>` records as part of the same logical set. Used to split the full map's cluster data across `mapgroupcluster.xml` and `mapgroupcluster01.xml`–`mapgroupcluster05.xml`.
 
 ---
 
 ## What Console Admins Typically Adjust
 
-These files are almost never manually edited on console servers. They are auto-generated for each map and represent the full geographic grouping of all loot positions.
-
-The main scenario where you would touch these files is when adding new buildings to the map loot system — new buildings added to mapgrouppos.xml would need to be added to the appropriate cluster file to be fully integrated into CE geographic management.
+These files are almost never manually edited on console servers. They are generated for each map and represent the full split set of cluster group placements.
 
 ---
 
 ## mapclusterproto.xml
 
-`mapclusterproto.xml` defines the prototype rules for cluster behavior — essentially the blueprint that governs how cluster groups operate within CE. Like mapgroupproto.xml is to mapgrouppos.xml, mapclusterproto.xml is to the cluster files.
+`mapclusterproto.xml` defines the prototype rules for cluster behavior. See [mapclusterproto.xml](mapclusterproto_xml.md) for its confirmed field shape.
 
 **Console Path:**
 ```
@@ -100,5 +91,11 @@ This file is not manually edited in standard console server operations.
 
 | Mistake | Result |
 |---|---|
-| Building in mapgrouppos.xml not added to any cluster file | Building may not be managed in CE geographic grouping |
-| Position mismatch between cluster file and mapgrouppos.xml | Reference fails, building excluded from cluster |
+| `name` in a `<group>` record not defined in mapgroupproto.xml | Reference fails, group excluded |
+| Broken `<include file="...">` reference | That split file's records are not loaded |
+
+---
+
+## Confidence Note
+
+The flat `<map>`/`<group pos a>`/`<include file>` structure is confirmed against an installed mission (six cluster files, 225,016 split group records, six include records). The exact runtime purpose of the split (performance, editing convenience, or something else) is not confirmed.

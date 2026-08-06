@@ -44,11 +44,14 @@ dayzps_missions/dayzOffline.<mapname>/cfgeconomycore.xml    (PlayStation)
     <default name="dyn_smax"          value="0"     />
     <default name="dyn_dmin"          value="0"     />
     <default name="dyn_dmax"          value="0"     />
+    <default name="randomloot_deloot_perevent" value="0"     />
     <default name="save_events_startup"       value="true"  />
     <default name="save_types_startup"        value="true"  />
     <default name="log_hivewarning"           value="true"  />
     <default name="log_storageinfo"           value="false" />
     <default name="log_missionfilewarning"    value="true"  />
+    <default name="log_ce_vehicle"            value="false" />
+    <default name="log_ce_statistics"         value="false" />
   </defaults>
 
   <!-- Register a custom types file from a mod -->
@@ -59,6 +62,8 @@ dayzps_missions/dayzOffline.<mapname>/cfgeconomycore.xml    (PlayStation)
 
 </economycore>
 ```
+
+The engine registers 24 named defaults total (plus an internal `none` entry). The block above shows the common ones; the full list is in the table below.
 
 ---
 
@@ -84,15 +89,16 @@ CE global defaults. These set baseline values for CE behavior.
 
 | Variable | Type | Default | What it controls |
 |---|---|---|---|
-| `world_segments` | Integer | 12 | How many segments the world is split into for CE processing. Affects performance on large maps. |
+| `world_segments` | Integer | 12 | How many segments the world is split into for CE processing. Affects performance on large maps. Exact operational effect beyond this is not fully confirmed. |
 | `backup_period` | Integer (minutes) | 60 | How often CE creates automatic world backups |
-| `backup_count` | Integer | 12 | How many backups to retain |
+| `backup_count` | Integer | 12 | How many backups to retain. If this is `0` while `backup_period` is nonzero, the engine emits a diagnostic warning. |
 | `backup_startup` | Boolean | false | Whether to create a backup when the server starts |
-| `dyn_radius` | Float (meters) | 20 | Default radius for dynamic infected zones |
-| `dyn_smin` | Float | 0 | Default static minimum count for dynamic infected zones |
-| `dyn_smax` | Float | 0 | Default static maximum count for dynamic infected zones |
-| `dyn_dmin` | Float | 0 | Default dynamic minimum count for dynamic infected zones |
-| `dyn_dmax` | Float | 0 | Default dynamic maximum count for dynamic infected zones |
+| `dyn_radius` | Float (meters) | 20 | Default radius for dynamic zones |
+| `dyn_smin` | **Integer** | 0 | Default static minimum count for dynamic zones. The native registry classifies this as an integer, not a float — correct any config or notes calling it a float. |
+| `dyn_smax` | **Integer** | 0 | Default static maximum count for dynamic zones. Integer-typed, same correction as `dyn_smin`. |
+| `dyn_dmin` | **Integer** | 0 | Default dynamic minimum count for dynamic zones. Integer-typed. |
+| `dyn_dmax` | **Integer** | 0 | Default dynamic maximum count for dynamic zones. Integer-typed. |
+| `randomloot_deloot_perevent` | Integer | not set locally by default | Per-event random-loot de-loot control. Exact operational semantics beyond the name are not fully confirmed. |
 | `save_events_startup` | Boolean | true | Whether to create `data/events.bin` on startup |
 | `save_types_startup` | Boolean | true | Whether to create `data/types.bin` on startup |
 | `log_hivewarning` | Boolean | true | Log hive warning messages |
@@ -100,11 +106,15 @@ CE global defaults. These set baseline values for CE behavior.
 | `log_missionfilewarning` | Boolean | true | Log warnings about mission files |
 | `log_ce_loop` | Boolean | false | Log CE loop timing |
 | `log_ce_dynamicevent` | Boolean | false | Log dynamic event CE detail |
+| `log_ce_vehicle` | Boolean | false | Log vehicle economy detail |
 | `log_ce_lootspawn` | Boolean | false | Log loot spawn detail |
 | `log_ce_lootcleanup` | Boolean | false | Log loot cleanup detail |
 | `log_ce_lootrespawn` | Boolean | false | Log loot respawn detail |
+| `log_ce_statistics` | Boolean | false | Log economy statistics detail |
 | `log_ce_zombie` | Boolean | false | Log infected CE detail |
 | `log_ce_animal` | Boolean | false | Log animal CE detail |
+
+This is the full set of 24 named defaults the engine registers (plus an internal `none` entry) — every name above is a legal `<default name="..." value="..."/>` even if your installed `cfgeconomycore.xml` doesn't declare all of them. Undeclared ones fall back to the engine's own internal default.
 
 **Diagnostics use:** Enabling CE logging flags (`log_ce_lootrespawn`, `log_ce_lootspawn`) generates detailed RPT output useful for diagnosing CE overtime and spawn issues. Disable after diagnostics — they create large log files.
 
@@ -124,7 +134,7 @@ Registers additional CE files beyond the default db/ files. This is how custom t
 |---|---|
 | `folder` | Subfolder path relative to mission root |
 | `name` | Filename within that folder |
-| `type` | What CE file type to treat it as: `types`, `events`, `globals`, `messages`, `spawnabletypes`, `economy` |
+| `type` | What CE file type to treat it as: `types`, `events`, `globals`, `messages`, `spawnabletypes`, `economy`, `randompresets` |
 
 **Console use case:** If you have a custom mod adding items, its types.xml can be registered here as an additional types file rather than merging it into the main types.xml.
 

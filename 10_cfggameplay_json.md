@@ -239,13 +239,13 @@ Higher `shockRefillSpeedConscious` means players wake up from unconsciousness fa
 
 How fast each stat depletes per second while a player is underwater without air.
 
-| Field | Default |
+| Field | Observed value |
 |---|---|
 | `staminaDepletionSpeed` | 10.0 |
-| `healthDepletionSpeed` | 2.0 |
-| `shockDepletionSpeed` | 5.0 |
+| `healthDepletionSpeed` | 10.0 |
+| `shockDepletionSpeed` | 10.0 |
 
-Higher values = faster drowning death.
+These match the full example block above (all three at `10.0`) — treat this as the observed snapshot value, not a universal engine default, and confirm against your own `cfggameplay.json`. Higher values = faster drowning death.
 
 ---
 
@@ -404,6 +404,12 @@ Multiplies the speed at which boats decay.
 - `1.0` — normal decay rate
 - `0.0` — boats don't decay
 - `2.0` — boats decay twice as fast
+
+---
+
+## Confidence Note
+
+This page describes the field shape and observed behavior for `cfggameplay.json`. It has not been independently matched against native binary parsers the way the `db/` economy files have — treat field behavior here as locally observed (`L`), not binary-confirmed (`B`), unless stated otherwise. `spawnGearPresetFiles`, `playerRestrictedAreaFiles`, and `disableColdAreaPlacementCheck` are documented from the schema shape; their downstream runtime effects are not independently verified.
 
 ---
 

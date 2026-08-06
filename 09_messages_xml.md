@@ -140,6 +140,7 @@ The message string shown in game chat.
 |---|---|
 | `#name` | The server's hostname as configured in Nitrado settings |
 | `#tmin` | Remaining minutes (used with `<deadline>`) |
+| `#port` | The server's connection port |
 
 **XML character escaping:** If your message contains any of these characters, they must be escaped:
 

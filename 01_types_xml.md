@@ -233,6 +233,19 @@ Multiple `<value>` lines are allowed and mean "this item can appear in any of th
 
 ---
 
+### `<tag name="..."/>`
+
+**Type:** String — must match a `<tag>` entry in `cfglimitsdefinition.xml`  
+**What it does:** Assigns a placement context tag to the item (e.g. `floor`, `shelves`, `ground`), narrowing which physical loot points in `mapgroupproto.xml` are eligible to spawn it — the same tag vocabulary used by container-level `<tag>` filtering.
+
+Native type loaders recognize tag assignment on `<type>` entries; this was previously undocumented on this page.
+
+```xml
+<tag name="floor"/>
+```
+
+---
+
 ## What Console Admins Typically Adjust
 
 1. **`nominal` and `min`** — increasing them to boost how often something appears. Always keep min < nominal.

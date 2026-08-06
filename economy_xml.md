@@ -41,7 +41,9 @@ dayzps_missions/dayzOffline.<mapname>/db/economy.xml    (PlayStation)
 
 ## What the Vanilla Defaults Tell You
 
-Reading the vanilla defaults reveals key design decisions about how Bohemia intends the CE to work:
+The table below reflects the block structure shown above as an observed mission snapshot. Treat it as policy this install ships with, not a value hard-coded into the engine — confirm against your own `db/economy.xml` before relying on it.
+
+Reading these defaults reveals key design decisions about how Bohemia intends the CE to work:
 
 - **Animals and zombies do not persist between restarts** (`load="0"`, `save="0"`) — their populations rebuild fresh every restart.
 - **Building loot persists but does not respawn on startup** (`load="1"`, `respawn="0"`) — looted buildings stay looted at restart, CE gradually refills them during runtime.
@@ -94,7 +96,7 @@ Whether CE respawns entities from this group at startup.
 - `true` — entities in this group are respawned at server start
 - `false` — entities are not auto-respawned at startup (they must build up naturally)
 
-Note: `player` has `respawn="false"` by default — players are not respawned by CE.
+**Note:** the installed example above has `player respawn="1"`. Treat this as an observed mission policy, not a universal binary-hardcoded default — do not assume every install ships the same value without checking your own `economy.xml`.
 
 ---
 
