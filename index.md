@@ -9,6 +9,14 @@ Complete field-level reference for every user-editable DayZ server configuration
 
 ---
 
+## Running the Discord too?
+
+If you also manage the community around your DayZ server, [IC Moderation](https://scullyxlife.github.io/ic-moderation/dayz/?utm_source=dayz-console-wiki&utm_medium=referral&utm_campaign=dayz-community) handles the Discord side: support tickets, player reports, moderation history, onboarding, roles, announcements, scheduling, and other community workflows without replacing your existing killfeed or server tools.
+
+[See IC Moderation for DayZ communities →](https://scullyxlife.github.io/ic-moderation/dayz/?utm_source=dayz-console-wiki&utm_medium=referral&utm_campaign=dayz-community)
+
+---
+
 ## What's Here
 
 This wiki documents each config file: what it does, every field explained, how it connects to other files, and what silently breaks things when it's wrong.
