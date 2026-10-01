@@ -17,9 +17,13 @@ search:
 
 nav_sort: order
 
-footer_content: "DayZ Console Server Configuration Reference &mdash; Xbox &amp; PlayStation"
+footer_content: "DayZ Console Server Configuration Reference &mdash; Xbox &amp; PlayStation &nbsp;&middot;&nbsp; <a href=\"https://scullyxlife.github.io/ic-moderation/dayz/?utm_source=dayz-console-wiki&utm_medium=footer&utm_campaign=dayz-community\">Discord community management with IC Moderation</a>"
 
 aux_links:
+  "IC Moderation":
+    - "https://scullyxlife.github.io/ic-moderation/dayz/?utm_source=dayz-console-wiki&utm_medium=nav&utm_campaign=dayz-community"
+  "DayZ Desktop Tool":
+    - "https://scullyxlife.github.io/IC-ToolSuite-App/index.html?utm_source=dayz-console-wiki&utm_medium=nav&utm_campaign=dayz-tools"
   "View on GitHub":
     - "//github.com/ScullyXlife/dayz-console-wiki"
 
